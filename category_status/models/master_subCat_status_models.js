@@ -21,6 +21,14 @@ const masterSubCatStatusSchema = new mongoose.Schema({
         type: String,
         required: [true, "Please Add Game Category Name"],
       },
+      comession: {
+        type: Number,
+        default: 0,
+      },
+      mainCompensation: {
+        type: Number,
+        default: 0,
+      },
       status: {
         type: Boolean,
         default: true,

@@ -14,6 +14,7 @@ const GameSubCat = require("../gameCategories/models/gameSubCatModels");
 
 const MasterCatStatus = require("../category_status/models/master_cat_status_models");
 const MasterSubCatStatus = require("../category_status/models/master_subCat_status_models");
+const LotteryFilterSetting = require("../lotteryFilterSetting/models/lotteryFilterSettingModels");
 
 const signToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -89,7 +90,16 @@ exports.signup = catchAsync(async (req, res, next) => {
       });
 
       for (const subCat of GameSubCategories) {
-        subCatObjArr.push(subCat);
+        const obj = await LotteryFilterSetting.findOne({
+          subCategoryId: subCat._id,
+        });
+        if (obj) {
+          const newObj = {
+            ...subCat.toObject(),
+            mainCompensation: obj.mainCompensation,
+          };
+          subCatObjArr.push(newObj);
+        }
       }
 
       // Save the user to update SubcategoriesObjArr
